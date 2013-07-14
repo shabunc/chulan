@@ -60,4 +60,4 @@ elif args.shadow == 'I':
     elif args.list:
         (proj_name, locale) = args.list;
         for item in items().list(proj_name, locale):
-            print "%s \t %s" % (item.key, item.value)
+            print "%s=%s" % (item.key, item.value)

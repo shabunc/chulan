@@ -24,9 +24,9 @@ class items:
         session = chu_alchemy.getSession()
         session.add(item)
         session.commit()
-    def list(self, project_name, locale="RU"):
+    def list(self, project_name, locale="RU",format="properties"):
         session = chu_alchemy.getSession()
-        items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).all()
+        items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).order_by(chu_alchemy.Items.key).all()
         return items;
         
 
