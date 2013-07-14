@@ -5,12 +5,8 @@ from chulan import projects, locales
 import argparse
 
 def list():
-    chu = projects()
-    chu.connect()
-    for project in chu.list():
-        (name, uid) = project
-        print(name)
-    chu.close()
+    for p in projects().list():
+        print p.name
 
 
 #http://docs.python.org/2/library/argparse.html
