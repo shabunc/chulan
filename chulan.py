@@ -8,21 +8,15 @@ import chu_alchemy
 
 
 
-
-class config:
-    conf = None
-    def __init__(self):
-        path = os.path.join(os.path.expanduser('~'),'.chulan')
-        self.conf = imp.load_source('.chulan', path)
-
-
 class locales:
-    def add(locale):
-        loc = chu_alchemy.Locales(locale)
-        chu_alchemy.getSession().add(loc)
+    def add(self, name):
+        loc = chu_alchemy.Locales(name)
+        print(loc)
+        #chu_alchemy.getSession().add(loc)
+        #chu_alchemy.getSession().add(loc)
 
 
-class chulan:
+class projects:
     config = None
     conn = None
 

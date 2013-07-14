@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import __future__
-from chulan import chulan as ch
+from chulan import projects, locales
 import argparse
 
 def list():
-    chu = ch()
+    chu = projects()
     chu.connect()
     for project in chu.list():
         (name, uid) = project
@@ -25,5 +25,5 @@ if (args.list):
 elif (args.a):
     (name,) = args.a
     if (args.locale):
-        print(name)
+        locales().add(name)
 
