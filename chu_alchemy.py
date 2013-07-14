@@ -28,3 +28,17 @@ class Locales(Base):
 
     def __repr__(self):
         return "<Locale('%s')>" % (self.locale)
+
+
+if __name__ == "__main__":
+    from sqlalchemy import create_engine
+    from chulan import config
+    
+    def create():
+        conf = config().conf
+        url = "postgresql://%s:%s@localhost:5432/%s" % (conf.dbuser, conf.dbpassword, conf.dbname)
+        engine = create_engine(url)
+        Base.metadata.create_all(engine) 
+        print(engine)
+
+    create()

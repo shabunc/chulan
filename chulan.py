@@ -45,7 +45,6 @@ class chulan:
 
 
     def list(self):
-        #cur.execute("INSERT INTO MAIN(msg) VALUES (%s)", (line.rstrip(),))
         cur = self.conn.cursor()
         cur.execute('SELECT name, id FROM projects')
         return cur.fetchall()
