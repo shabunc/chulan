@@ -21,6 +21,7 @@ subparsers = parser.add_subparsers(help='sub-command help')
 proj_parser = subparsers.add_parser('projects')
 proj_parser.add_argument('--shadow', default='P')
 proj_parser.add_argument('--list', action='store_true', default=False)
+proj_parser.add_argument('-a', '--add', nargs=1)
 
 
 locale_parser = subparsers.add_parser('locales')
@@ -38,6 +39,9 @@ args = parser.parse_args()
 if args.shadow == 'P':
     if args.list:
         project_list()
+    elif args.add:
+        (name,) = args.add
+        projects().add(name)
 elif args.shadow == 'L':
     if args.list:
         locale_list()
@@ -45,6 +49,10 @@ elif args.shadow == 'I':
     if args.keyvalue:
         if args.project and args.locale:
             (key, val) = args.keyvalue
-            items().add(key, val, args.project, args.locale)
+            (proj_name,) = args.project
+            (locale,) = args.locale
+            project = projects().get(proj_name)
+            if project:
+                items().add(key, val, project, locale)
         else:
             raise Exception("Project and locale should be setted directly")

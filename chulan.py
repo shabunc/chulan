@@ -31,6 +31,15 @@ class projects:
     def list(self):
         session = chu_alchemy.getSession()
         return session.query(chu_alchemy.Projects).all()
+    def add(self, name):
+        session = chu_alchemy.getSession()
+        project = chu_alchemy.Projects(name)
+        session.add(project)
+        session.commit()
+    def get(self, name):
+        session = chu_alchemy.getSession()
+        res = session.query(chu_alchemy.Projects).filter_by(name='ngenix.www').first()
+        return res;
 
 
         

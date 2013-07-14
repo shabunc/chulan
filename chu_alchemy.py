@@ -11,7 +11,7 @@ Base = declarative_base()
 
 class Projects(Base):
     __tablename__ = 'projects'
-    items = relationship("Items", backref='items')
+    items = relationship("Items", backref='project_items')
 
     name = Column(String(200), primary_key=True)
     id = Column(Integer, primary_key=True)
@@ -20,13 +20,13 @@ class Projects(Base):
         self.name = name
 
     def __repr__(self):
-        return "<Project('%s')>" % (self.name)
+        return "<Project('%s', %s)>" % (self.name, self.id)
 
 
 
 class Locales(Base):
     __tablename__ = 'locales'
-    items = relationship("Items", backref='items')
+    items = relationship("Items", backref='locale_items')
     
     locale = Column(String(2), primary_key=True)
 
@@ -47,11 +47,12 @@ class Items(Base):
     locale_id = Column(String(2), ForeignKey('locales.locale'))
     __table_args__ = (ForeignKeyConstraint([project_id, project_name], [Projects.id, Projects.name]), {})
 
-    def __init__(self, key, value, project_id, project_name, locale_id):
+    def __init__(self, key, value, project, locale_id):
         self.key = key
         self.value = value
-        self.pid = pid
-        self.locale = locale
+        self.project_name = project.name
+        self.project_id  = project.id
+        self.locale_id = locale_id
 
     def __repr__(self):
         return "<Item('%s,%s,%s,%s')>" %(self.key, self.value, self.project_name, self.locale_id)
