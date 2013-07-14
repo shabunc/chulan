@@ -6,6 +6,13 @@ import imp
 import psycopg2
 
 
+class config:
+    conf = None
+    def __init__(self):
+        path = os.path.join(os.path.expanduser('~'),'.chulan')
+        self.conf = imp.load_source('.chulan', path)
+
+
 class chulan:
     config = None
     conn = None
