@@ -38,7 +38,7 @@ def bindEngine():
     return engine
 
 def getSession():
-    sessionmaker(bind=bindEngine())
+    return sessionmaker(bind=bindEngine())()
 
 
 if __name__ == "__main__":

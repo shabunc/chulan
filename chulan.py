@@ -11,9 +11,10 @@ import chu_alchemy
 class locales:
     def add(self, name):
         loc = chu_alchemy.Locales(name)
-        print(loc)
-        #chu_alchemy.getSession().add(loc)
-        #chu_alchemy.getSession().add(loc)
+        session = chu_alchemy.getSession()
+        session.add(loc)
+        session.commit()
+
 
 
 class projects:
