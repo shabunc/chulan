@@ -4,9 +4,13 @@ import __future__
 from chulan import projects, locales
 import argparse
 
-def list():
+def project_list():
     for p in projects().list():
         print p.name
+
+def locale_list():
+    for l in locales().list():
+        print l.locale
 
 
 #http://docs.python.org/2/library/argparse.html
@@ -17,7 +21,10 @@ parser.add_argument('-a', nargs=1)
 
 args = parser.parse_args()
 if (args.list):
-    list()
+    if (args.locale):
+        locale_list()
+    else:
+        project_list()
 elif (args.a):
     (name,) = args.a
     if (args.locale):
