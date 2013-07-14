@@ -2,6 +2,7 @@
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
 
 #http://docs.sqlalchemy.org/en/rel_0_8/orm/tutorial.html
 
@@ -29,15 +30,22 @@ class Locales(Base):
     def __repr__(self):
         return "<Locale('%s')>" % (self.locale)
 
+def bindEngine():
+    conf = config().conf
+    url = "postgresql://%s:%s@localhost:5432/%s" % (conf.dbuser, conf.dbpassword, conf.dbname)
+    engine = create_engine(url)
+    return engine
+
+def getSession():
+    return sessionmaker(bind=bindEngine())
+
 
 if __name__ == "__main__":
     from sqlalchemy import create_engine
     from chulan import config
     
     def create():
-        conf = config().conf
-        url = "postgresql://%s:%s@localhost:5432/%s" % (conf.dbuser, conf.dbpassword, conf.dbname)
-        engine = create_engine(url)
+        engine = bindEngine()
         Base.metadata.create_all(engine) 
         print(engine)
 

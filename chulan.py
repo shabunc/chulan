@@ -4,6 +4,9 @@ import __future__
 import os
 import imp
 import psycopg2
+import chu_alchemy
+
+
 
 
 class config:
@@ -11,6 +14,12 @@ class config:
     def __init__(self):
         path = os.path.join(os.path.expanduser('~'),'.chulan')
         self.conf = imp.load_source('.chulan', path)
+
+
+class locales:
+    def add(locale):
+        loc = chu_alchemy.Locales(locale)
+        chu_alchemy.getSession().add(loc)
 
 
 class chulan:
@@ -48,6 +57,9 @@ class chulan:
         cur = self.conn.cursor()
         cur.execute('SELECT name, id FROM projects')
         return cur.fetchall()
+
+
+        
 
     
 
