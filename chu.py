@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import __future__
-from chulan import projects, locales
+from chulan import projects, locales, items
 import argparse
 
 def project_list():
@@ -27,6 +27,13 @@ locale_parser = subparsers.add_parser('locales')
 locale_parser.add_argument('--shadow', default='L')
 locale_parser.add_argument('--list', action='store_true', default=False)
 
+item_parser = subparsers.add_parser('items')
+item_parser.add_argument('--shadow', default='I')
+item_parser.add_argument('-p','--project', nargs=1)
+item_parser.add_argument('-l','--locale', nargs=1)
+item_parser.add_argument('-kv','--keyvalue', nargs=2)
+
+
 args = parser.parse_args()
 if args.shadow == 'P':
     if args.list:
@@ -34,3 +41,10 @@ if args.shadow == 'P':
 elif args.shadow == 'L':
     if args.list:
         locale_list()
+elif args.shadow == 'I':
+    if args.keyvalue:
+        if args.project and args.locale:
+            (key, val) = args.keyvalue
+            items().add(key, val, args.project, args.locale)
+        else:
+            raise Exception("Project and locale should be setted directly")
