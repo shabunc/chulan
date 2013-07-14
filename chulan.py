@@ -43,4 +43,5 @@ class chulan:
         cur.execute('SELECT name, id FROM projects')
         return cur.fetchall()
 
+    
 
