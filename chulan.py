@@ -18,6 +18,13 @@ class locales:
         session = chu_alchemy.getSession()
         return session.query(chu_alchemy.Locales).all()
 
+class items:
+    def add(self, key, value, project, locale):
+        item = chu_alchemy.Items(key, value, project, locale)
+        session = chu_alchemy.getSession()
+        session.add(item)
+        session.commit()
+
 
 
 class projects:
