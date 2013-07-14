@@ -24,6 +24,11 @@ class items:
         session = chu_alchemy.getSession()
         session.add(item)
         session.commit()
+    def list(self, project_name, locale="RU"):
+        session = chu_alchemy.getSession()
+        items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).all()
+        return items;
+        
 
 
 
@@ -38,7 +43,7 @@ class projects:
         session.commit()
     def get(self, name):
         session = chu_alchemy.getSession()
-        res = session.query(chu_alchemy.Projects).filter_by(name='ngenix.www').first()
+        res = session.query(chu_alchemy.Projects).filter_by(name=name).first()
         return res;
 
 

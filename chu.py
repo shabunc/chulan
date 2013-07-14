@@ -33,6 +33,7 @@ item_parser.add_argument('--shadow', default='I')
 item_parser.add_argument('-p','--project', nargs=1)
 item_parser.add_argument('-l','--locale', nargs=1)
 item_parser.add_argument('-kv','--keyvalue', nargs=2)
+item_parser.add_argument('--list', nargs=2)
 
 
 args = parser.parse_args()
@@ -56,3 +57,7 @@ elif args.shadow == 'I':
                 items().add(key, val, project, locale)
         else:
             raise Exception("Project and locale should be setted directly")
+    elif args.list:
+        (proj_name, locale) = args.list;
+        for item in items().list(proj_name, locale):
+            print "%s \t %s" % (item.key, item.value)
