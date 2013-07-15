@@ -42,9 +42,9 @@ class Items(Base):
     __tablename__ = 'items'
     key = Column(String(200), primary_key=True)
     value = Column(String(400), nullable=False)
-    project_id = Column(Integer)
+    project_id = Column(Integer, primary_key=True)
     project_name = Column(String(200))
-    locale_id = Column(String(2), ForeignKey('locales.locale'))
+    locale_id = Column(String(2), ForeignKey('locales.locale'), primary_key=True)
     __table_args__ = (ForeignKeyConstraint([project_id, project_name], [Projects.id, Projects.name]), {})
 
     def __init__(self, key, value, project, locale_id):

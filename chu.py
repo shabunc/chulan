@@ -54,7 +54,9 @@ elif args.shadow == 'I':
             (locale,) = args.locale
             project = projects().get(proj_name)
             if project:
-                items().add(key, val, project, locale)
+                items().add(key.lower(), val, project, locale)
+            else:
+                raise Exception("project %s does not exist" % proj_name)
         else:
             raise Exception("Project and locale should be setted directly")
     elif args.list:
