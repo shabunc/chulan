@@ -35,6 +35,7 @@ item_parser.add_argument('-p','--project', nargs=1)
 item_parser.add_argument('-l','--locale', nargs=1)
 item_parser.add_argument('-kv','--keyvalue', nargs=2)
 item_parser.add_argument('--list', nargs=2)
+item_parser.add_argument('-v','--verbose', action='store_true', default=False)
 
 
 args = parser.parse_args()
@@ -58,7 +59,10 @@ elif args.shadow == 'I':
             if project:
                 item, error = items().add(key, val, project, locale)
                 if error:
-                    sys.exit("item has not been added")
+                    if args.verbose:
+                        sys.exit('%s' % error)
+                    else:
+                        sys.exit("item has not been added")
                 else:
                     print("keyval pair (%s, %s) has been added" % (key, val)) 
             else:
