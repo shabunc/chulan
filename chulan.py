@@ -5,7 +5,7 @@ import os
 import imp
 import psycopg2
 import chu_alchemy
-
+import sqlalchemy
 
 
 class locales:
@@ -23,7 +23,11 @@ class items:
         item = chu_alchemy.Items(key, value, project, locale)
         session = chu_alchemy.getSession()
         session.add(item)
-        session.commit()
+        try:
+            session.commit()
+            return (item, False)
+        except sqlalchemy.exc.IntegrityError as error:
+            return (item, error)    
     def list(self, project_name, locale="RU",format="properties"):
         session = chu_alchemy.getSession()
         items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).order_by(chu_alchemy.Items.key).all()

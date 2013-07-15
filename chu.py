@@ -3,6 +3,7 @@
 import __future__
 from chulan import projects, locales, items
 import argparse
+import sys
 
 def project_list():
     for p in projects().list():
@@ -53,8 +54,13 @@ elif args.shadow == 'I':
             (proj_name,) = args.project
             (locale,) = args.locale
             project = projects().get(proj_name)
+            key = key.lower()
             if project:
-                items().add(key.lower(), val, project, locale)
+                item, error = items().add(key, val, project, locale)
+                if error:
+                    sys.exit("item has not been added")
+                else:
+                    print("keyval pair (%s, %s) has been added" % (key, val)) 
             else:
                 raise Exception("project %s does not exist" % proj_name)
         else:
