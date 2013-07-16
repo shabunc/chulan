@@ -34,7 +34,7 @@ locale_parser.add_argument('--list', action='store_true', default=False)
 item_parser = subparsers.add_parser('items')
 item_parser.add_argument('--shadow', default='I')
 item_parser.add_argument('-p','--project', nargs=1)
-item_parser.add_argument('-l','--locale', nargs=1)
+item_parser.add_argument('-l','--locale', action='append')
 item_parser.add_argument('-kv','--keyvalue', nargs=2)
 item_parser.add_argument('--list', nargs=2)
 item_parser.add_argument('-v','--verbose', action='store_true', default=False)
@@ -81,8 +81,9 @@ elif args.shadow == 'I':
     elif args.format == 'json':
         data = {}
         proj_name, = args.project
-        for l in locales().list():
-            locale = l.locale
+        print type(args.locale)
+        ls = args.locale or [l.locale for l in locales().list()]
+        for locale in ls:
             data[locale] = {}
             its = items().list(proj_name, locale)
             for it in its:
