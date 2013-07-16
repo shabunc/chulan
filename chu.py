@@ -83,10 +83,11 @@ elif args.shadow == 'I':
         proj_name, = args.project
         for l in locales().list():
             locale = l.locale
-            data[locale] = []
+            data[locale] = {}
             its = items().list(proj_name, locale)
             for it in its:
-                data[locale].append({it.key : it.value})
+                data[locale][it.key] = it.value
+                #data[locale].append({it.key : it.value})
         print(json.dumps(data))
     elif args.format == 'props':
         proj_name, = args.project
