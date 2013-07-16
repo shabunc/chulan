@@ -27,6 +27,7 @@ proj_parser.add_argument('-a', '--add', nargs=1)
 
 locale_parser = subparsers.add_parser('locales')
 locale_parser.add_argument('--shadow', default='L')
+locale_parser.add_argument('-a', '--add', nargs=1)
 locale_parser.add_argument('--list', action='store_true', default=False)
 
 item_parser = subparsers.add_parser('items')
@@ -48,6 +49,9 @@ if args.shadow == 'P':
 elif args.shadow == 'L':
     if args.list:
         locale_list()
+    elif args.add:
+        (locale,) = args.add
+        locales().add(locale)
 elif args.shadow == 'I':
     if args.keyvalue:
         if args.project and args.locale:
