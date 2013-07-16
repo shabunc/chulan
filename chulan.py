@@ -35,7 +35,6 @@ class items:
         
 
 
-
 class projects:
     def list(self):
         session = chu_alchemy.getSession()

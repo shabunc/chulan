@@ -4,6 +4,7 @@ import __future__
 from chulan import projects, locales, items
 import argparse
 import sys
+import json
 
 def project_list():
     for p in projects().list():
@@ -37,7 +38,11 @@ item_parser.add_argument('-l','--locale', nargs=1)
 item_parser.add_argument('-kv','--keyvalue', nargs=2)
 item_parser.add_argument('--list', nargs=2)
 item_parser.add_argument('-v','--verbose', action='store_true', default=False)
-
+format_group = item_parser.add_mutually_exclusive_group()
+format_group.set_defaults(format='props')
+format_group.add_argument('--json', action='store_const', dest='format', const='json')
+format_group.add_argument('--props', action='store_const', dest='format', const='props')
+format_group.add_argument('--xml', action='store_const', dest='format', const='props')
 
 args = parser.parse_args()
 if args.shadow == 'P':
@@ -75,5 +80,9 @@ elif args.shadow == 'I':
             raise Exception("Project and locale should be setted directly")
     elif args.list:
         (proj_name, locale) = args.list;
-        for item in items().list(proj_name, locale):
-            print "%s=%s" % (item.key, item.value)
+        its = items().list(proj_name, locale)
+        if args.format == 'props':
+            for item in its:
+                print "%s=%s" % (item.key, item.value)
+        elif args.format == 'json':    
+            print(json.dumps(its))
