@@ -78,11 +78,21 @@ elif args.shadow == 'I':
                 raise Exception("project %s does not exist" % proj_name)
         else:
             raise Exception("Project and locale should be setted directly")
-    elif args.list:
-        (proj_name, locale) = args.list;
+    elif args.format == 'json':
+        data = {}
+        proj_name, = args.project
+        for l in locales().list():
+            locale = l.locale
+            data[locale] = []
+            its = items().list(proj_name, locale)
+            for it in its:
+                data[locale].append({it.key : it.value})
+        print(json.dumps(data))
+    elif args.format == 'props':
+        proj_name, = args.project
+        locale, = args.locale
         its = items().list(proj_name, locale)
-        if args.format == 'props':
-            for item in its:
-                print "%s=%s" % (item.key, item.value)
-        elif args.format == 'json':    
-            print(json.dumps(its))
+        for item in its:
+            print "%s=%s" % (item.key, item.value)
+    elif args.list:
+        pass
