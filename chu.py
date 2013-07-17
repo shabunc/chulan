@@ -81,7 +81,6 @@ elif args.shadow == 'I':
     elif args.format == 'json':
         data = {}
         proj_name, = args.project
-        print type(args.locale)
         ls = args.locale or [l.locale for l in locales().list()]
         for locale in ls:
             data[locale] = {}

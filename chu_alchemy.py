@@ -60,7 +60,17 @@ class Items(Base):
 
 def bindEngine():
     conf = config.get_config()
-    url = "postgresql://%s:%s@localhost:5432/%s" % (conf.dbuser, conf.dbpassword, conf.dbname)
+    host = 'localhost'
+    try: 
+        host = config.dbhost
+    except AttributeError:
+        pass
+    port = '5432'
+    try:
+        port = config.dbport
+    except AttributeError:
+        pass
+    url = "postgresql://%s:%s@%s:%s/%s" % (conf.dbuser, conf.dbpassword, host, port, conf.dbname)
     engine = create_engine(url)
     return engine
 
