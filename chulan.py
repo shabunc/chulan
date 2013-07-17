@@ -3,7 +3,6 @@
 import __future__
 import os
 import imp
-import psycopg2
 import chu_alchemy
 import sqlalchemy
 
