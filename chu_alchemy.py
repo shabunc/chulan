@@ -62,12 +62,12 @@ def bindEngine():
     conf = config.get_config()
     host = 'localhost'
     try: 
-        host = config.dbhost
+        host = conf.dbhost
     except AttributeError:
         pass
     port = '5432'
     try:
-        port = config.dbport
+        port = conf.dbport
     except AttributeError:
         pass
     url = "postgresql://%s:%s@%s:%s/%s" % (conf.dbuser, conf.dbpassword, host, port, conf.dbname)
