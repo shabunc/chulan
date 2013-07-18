@@ -50,7 +50,6 @@ def export_json(project, locale):
     print(json.dumps(data))
 
 def add_to_project(project_name, locale, key, value):
-    key = key.lower()
     project = ch.projects().get(project_name)
     if project:
         item, error = ch.items().add(key, value, project, locale)
