@@ -1,99 +1,85 @@
 #!/usr/bin/env python
+"""
+Chulan, a simple and stupid localization
+key-value storage
 
-import __future__
-from chulan import projects, locales, items
-import argparse
-import sys
+Usage:
+    chu show locales
+    chu show projects
+    chu add locale <locale>
+    chu add project <project>
+    chu <project> add <key> <value> to <locale>
+    chu <project> export props <locale>
+    chu <project> export json <locale>
+    chu <project> stats
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+
+"""
+
+from docopt import docopt
+import chulan as ch
 import json
 
-def project_list():
-    for p in projects().list():
-        print p.name
-
-def locale_list():
-    for l in locales().list():
+def show_locales():
+    for l in ch.locales().list():
         print l.locale
 
+def show_projects():
+    for p in ch.projects().list():
+        print p.name
 
-#http://docs.python.org/2/library/argparse.html
-parser = argparse.ArgumentParser(description='A command-line API for using Chulan')
-#http://docs.python.org/dev/library/argparse.html#argparse.ArgumentParser.add_subparsers
-subparsers = parser.add_subparsers(help='sub-command help')
+def add_project(new_project):
+    print ("adding %s" % new_project)
+    ch.projects().add(new_project)
 
-proj_parser = subparsers.add_parser('projects')
-proj_parser.add_argument('--shadow', default='P')
-proj_parser.add_argument('--list', action='store_true', default=False)
-proj_parser.add_argument('-a', '--add', nargs=1)
+def add_locale(new_locale):
+    print ("adding %s" % new_locale)
+    ch.locales().add(new_locale)
+
+def export_props(project, locale):
+    for item in ch.items().list(project, locale):
+         print "%s=%s" % (item.key, item.value)
+
+def export_json(project, locale):
+    data = {locale: {}}
+    for item in ch.items().list(project, locale):
+        data[locale][item.key] = item.value
+    print(json.dumps(data))
+
+def add_to_project(project_name, locale, key, value):
+    key = key.lower()
+    project = ch.projects().get(project_name)
+    if project:
+        item, error = ch.items().add(key, value, project, locale)
+        print("%s %s %s %s" % (project_name, locale, key, value))
 
 
-locale_parser = subparsers.add_parser('locales')
-locale_parser.add_argument('--shadow', default='L')
-locale_parser.add_argument('-a', '--add', nargs=1)
-locale_parser.add_argument('--list', action='store_true', default=False)
+args = (docopt(__doc__, version="0.0.2"))
 
-item_parser = subparsers.add_parser('items')
-item_parser.add_argument('--shadow', default='I')
-item_parser.add_argument('-p','--project', nargs=1)
-item_parser.add_argument('-l','--locale', action='append')
-item_parser.add_argument('-kv','--keyvalue', nargs=2)
-item_parser.add_argument('--list', nargs=2)
-item_parser.add_argument('-v','--verbose', action='store_true', default=False)
-format_group = item_parser.add_mutually_exclusive_group()
-format_group.set_defaults(format='props')
-format_group.add_argument('--json', action='store_const', dest='format', const='json')
-format_group.add_argument('--props', action='store_const', dest='format', const='props')
-format_group.add_argument('--xml', action='store_const', dest='format', const='props')
-
-args = parser.parse_args()
-if args.shadow == 'P':
-    if args.list:
-        project_list()
-    elif args.add:
-        (name,) = args.add
-        projects().add(name)
-elif args.shadow == 'L':
-    if args.list:
-        locale_list()
-    elif args.add:
-        (locale,) = args.add
-        locales().add(locale)
-elif args.shadow == 'I':
-    if args.keyvalue:
-        if args.project and args.locale:
-            (key, val) = args.keyvalue
-            (proj_name,) = args.project
-            (locale,) = args.locale
-            project = projects().get(proj_name)
-            key = key.lower()
-            if project:
-                item, error = items().add(key, val, project, locale)
-                if error:
-                    if args.verbose:
-                        sys.exit('%s' % error)
-                    else:
-                        sys.exit("item has not been added")
-                else:
-                    print("keyval pair (%s, %s) has been added" % (key, val)) 
-            else:
-                raise Exception("project %s does not exist" % proj_name)
-        else:
-            raise Exception("Project and locale should be setted directly")
-    elif args.format == 'json':
-        data = {}
-        proj_name, = args.project
-        ls = args.locale or [l.locale for l in locales().list()]
-        for locale in ls:
-            data[locale] = {}
-            its = items().list(proj_name, locale)
-            for it in its:
-                data[locale][it.key] = it.value
-                #data[locale].append({it.key : it.value})
-        print(json.dumps(data))
-    elif args.format == 'props':
-        proj_name, = args.project
-        locale, = args.locale
-        its = items().list(proj_name, locale)
-        for item in its:
-            print "%s=%s" % (item.key, item.value)
-    elif args.list:
-        pass
+if args['show']:
+    locales, projects = args['locales'], args['projects']
+    if locales:
+        show_locales()
+    if projects:
+        show_projects()
+if args['export']:
+    project = args['<project>']
+    locale = args['<locale>']
+    as_props, as_json = args['props'], args['json']
+    if as_props:
+        export_props(project, locale)
+    elif as_json:
+        export_json(project, locale)
+if args['add']:
+    project, locale = args['<project>'], args['<locale>']
+    key, value = args['<key>'], args['<value>']
+    new_project, new_locale = args['project'], args['locale']
+    if new_project:
+        add_project(project)
+    elif new_locale:
+        add_locale(locale)
+    elif project:
+        add_to_project(project, locale, key, value)
