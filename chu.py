@@ -10,6 +10,7 @@ Usage:
     chu add project <project>
     chu <project> <locale> rm <key>
     chu <project> <locale> add <key> <value> 
+    chu <project> <locale> edit <key> <value> 
     chu <project> <locale> export props
     chu <project> <locale> export json
     chu <project> <locale> export xml
@@ -59,19 +60,26 @@ def export_xml(project, locale):
         root.append(child)
     print etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='utf-8')
 
-def add_to_project(project_name, locale, key, value):
+def add_key(project_name, locale, key, value):
     project = ch.projects().get(project_name)
     if project:
         item, error = ch.items().add(key, value, project, locale)
         print("%s %s %s %s" % (project_name, locale, key, value))
 
 def remove_key(project, locale, key):
-    item = None
     item = ch.items().remove(project, locale, key)
     if item is None:
-        print "[FAILED] Key %s  no found in %s/%s; nothing had been removed" % (key, project, locale)
+        print "[FAILED] Key %s  no found in %s/%s; nothing has been removed" % (key, project, locale)
     else:
         print "[OK] Key %s succesfully removed from %s/%s" % (key, project, locale)
+
+def edit_key(project, local, key, value):
+    item = ch.items().edit(project, locale, key, value)
+    if item is None:
+        print "[FAILED] Key %s  no found in %s/%s; nothing has been edited" % (key, project, locale)
+    else:
+        print "[OK] Key %s succesfully edited in %s/%s" % (key, project, locale)
+    
 
 args = (docopt(__doc__, version="0.0.2"))
 
@@ -100,7 +108,11 @@ elif args['add']:
     elif new_locale:
         add_locale(locale)
     elif project:
-        add_to_project(project, locale, key, value)
+        add_key(project, locale, key, value)
+elif args['edit']:
+    project, locale = args['<project>'], args['<locale>']
+    key, value = args['<key>'], args['<value>']
+    edit_key(project, locale, key, value)
 elif args['rm']:
     project_name, locale, key = args['<project>'], args['<locale>'], args['<key>']
     remove_key(project_name, locale, key)

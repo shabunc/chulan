@@ -42,6 +42,18 @@ class items:
             session.delete(item)
             session.commit();
         return item
+    def edit(self, project, locale, key, value):
+        session = chu_alchemy.getSession()
+        item = session.query(chu_alchemy.Items).filter_by(
+                   key=key,
+                   project_name=project,
+                   locale_id=locale
+               ).first()
+        if not item is None:
+            item.value = value
+            session.commit()
+        return item
+        
         
 
 
