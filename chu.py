@@ -10,8 +10,9 @@ Usage:
     chu add project <project>
     chu <project> <locale> rm <key>
     chu <project> add <key> <value> to <locale>
-    chu <project> export props <locale>
-    chu <project> export json <locale>
+    chu <project> <locale> export props
+    chu <project> <locale> export json
+    chu <project> <locale> export xml
     chu <project> stats
 
 Options:
@@ -23,6 +24,7 @@ Options:
 from docopt import docopt
 import chulan as ch
 import json
+from lxml import etree
 
 def show_locales():
     for l in ch.locales().list():
@@ -50,6 +52,13 @@ def export_json(project, locale):
         data[locale][item.key] = item.value
     print(json.dumps(data))
 
+def export_xml(project, locale):
+    root = etree.Element('items', locale=locale)
+    for item in ch.items().list(project, locale):
+        child = etree.Element('item', key=item.key, value=item.value)
+        root.append(child)
+    print etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='utf-8')
+
 def add_to_project(project_name, locale, key, value):
     project = ch.projects().get(project_name)
     if project:
@@ -75,11 +84,13 @@ if args['show']:
 elif args['export']:
     project = args['<project>']
     locale = args['<locale>']
-    as_props, as_json = args['props'], args['json']
+    as_props, as_json, as_xml = args['props'], args['json'], args['xml']
     if as_props:
         export_props(project, locale)
     elif as_json:
         export_json(project, locale)
+    elif as_xml:
+        export_xml(project, locale)
 elif args['add']:
     project, locale = args['<project>'], args['<locale>']
     key, value = args['<key>'], args['<value>']
