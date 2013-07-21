@@ -54,7 +54,7 @@ def export_json(project, locale):
     print(json.dumps(data))
 
 def export_xml(project, locale):
-    root = etree.Element('items', locale=locale)
+    root = etree.Element('locale', locale=locale)
     for item in ch.items().list(project, locale):
         child = etree.Element('item', key=item.key, value=item.value)
         root.append(child)
@@ -110,7 +110,7 @@ elif args['add']:
     elif project:
         add_key(project, locale, key, value)
 elif args['edit']:
-    project, locale = args['<project>'], args['<locale>']
+    uroject, locale = args['<project>'], args['<locale>']
     key, value = args['<key>'], args['<value>']
     edit_key(project, locale, key, value)
 elif args['rm']:
