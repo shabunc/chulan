@@ -31,6 +31,17 @@ class items:
         session = chu_alchemy.getSession()
         items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).order_by(chu_alchemy.Items.key).all()
         return items;
+    def remove(self, project, locale, key):
+        session = chu_alchemy.getSession()
+        item = session.query(chu_alchemy.Items).filter_by(
+                   key=key,
+                   project_name=project,
+                   locale_id=locale
+               ).first()
+        if not item is None:
+            session.delete(item)
+            session.commit();
+        return item
         
 
 

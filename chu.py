@@ -8,6 +8,7 @@ Usage:
     chu show projects
     chu add locale <locale>
     chu add project <project>
+    chu <project> <locale> rm <key>
     chu <project> add <key> <value> to <locale>
     chu <project> export props <locale>
     chu <project> export json <locale>
@@ -55,6 +56,13 @@ def add_to_project(project_name, locale, key, value):
         item, error = ch.items().add(key, value, project, locale)
         print("%s %s %s %s" % (project_name, locale, key, value))
 
+def remove_key(project, locale, key):
+    item = None
+    item = ch.items().remove(project, locale, key)
+    if item is None:
+        print "[FAILED] Key %s  no found in %s/%s; nothing had been removed" % (key, project, locale)
+    else:
+        print "[OK] Key %s succesfully removed from %s/%s" % (key, project, locale)
 
 args = (docopt(__doc__, version="0.0.2"))
 
@@ -64,7 +72,7 @@ if args['show']:
         show_locales()
     if projects:
         show_projects()
-if args['export']:
+elif args['export']:
     project = args['<project>']
     locale = args['<locale>']
     as_props, as_json = args['props'], args['json']
@@ -72,7 +80,7 @@ if args['export']:
         export_props(project, locale)
     elif as_json:
         export_json(project, locale)
-if args['add']:
+elif args['add']:
     project, locale = args['<project>'], args['<locale>']
     key, value = args['<key>'], args['<value>']
     new_project, new_locale = args['project'], args['locale']
@@ -82,3 +90,7 @@ if args['add']:
         add_locale(locale)
     elif project:
         add_to_project(project, locale, key, value)
+elif args['rm']:
+    project_name, locale, key = args['<project>'], args['<locale>'], args['<key>']
+    remove_key(project_name, locale, key)
+
