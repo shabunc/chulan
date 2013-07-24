@@ -45,13 +45,13 @@ def add_locale(new_locale):
 
 def export_props(project, locale):
     for item in ch.items().list(project, locale):
-         print "%s=%s" % (item.key, item.value)
+         print ("%s=%s" % (item.key, item.value)).encode('utf-8')
 
 def export_json(project, locale):
     data = {locale: {}}
     for item in ch.items().list(project, locale):
         data[locale][item.key] = item.value
-    print(json.dumps(data))
+    print(json.dumps(data).encode('utf-8'))
 
 def export_xml(project, locale):
     root = etree.Element('locale', locale=locale)
