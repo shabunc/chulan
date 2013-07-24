@@ -12,5 +12,7 @@ setup(
     license='do whatever you want',
     description='A very stupid key-valuy command line interface for i18n',
     zip_safe=False,
-    packages=find_packages()
+    packages=find_packages(),
+    install_requires=['sqlalchemy', 'docopt', 'psycopg2'],
+    scripts=['chulan/chu']
 )

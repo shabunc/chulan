@@ -1,1 +1,4 @@
 *.pyc
+build/
+dist/
+chulan.egg-info/
