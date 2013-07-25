@@ -50,8 +50,8 @@ def export_props(project, locale):
 def export_json(project, locale):
     data = {locale: {}}
     for item in ch.items().list(project, locale):
-        data[locale][item.key] = item.value.encode('utf-8')
-    print((json.dumps(data, sort_keys=True, encoding="utf-8",indent=4, separators=(',', ': ')).encode('utf-8')))
+        data[locale][item.key] = item.value
+    print (json.dumps(data, sort_keys=True, ensure_ascii=False,indent=4, separators=(',', ': ')))
 
 def export_xml(project, locale):
     root = etree.Element('locale', locale=locale)
