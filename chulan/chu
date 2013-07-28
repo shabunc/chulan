@@ -12,7 +12,7 @@ Usage:
     chu <project> <locale> add <key> <value> 
     chu <project> <locale> edit <key> <value> 
     chu <project> <locale> export props
-    chu <project> <locale> export json
+    chu <project> <locale> export json [--wrap <start> <end>]
     chu <project> <locale> export xml
     chu <project> stats
 
@@ -47,11 +47,13 @@ def export_props(project, locale):
     for item in ch.items().list(project, locale):
          print ("%s=%s" % (item.key, item.value)).encode('utf-8')
 
-def export_json(project, locale):
+def export_json(project, locale, wrapstart="", wrapend=""):
     data = {locale: {}}
     for item in ch.items().list(project, locale):
         data[locale][item.key] = item.value
-    print (json.dumps(data, sort_keys=True, ensure_ascii=False,indent=4, separators=(',', ': ')))
+    json_data = (json.dumps(data, sort_keys=True, ensure_ascii=False,indent=4, separators=(',', ': ')))
+    res = wrapstart + json_data + wrapend
+    print res
 
 def export_xml(project, locale):
     root = etree.Element('locale', locale=locale)
@@ -96,7 +98,12 @@ elif args['export']:
     if as_props:
         export_props(project, locale)
     elif as_json:
-        export_json(project, locale)
+        start = ""
+        end = ""
+        if (args["--wrap"]):
+            start = args["<start>"]
+            end = args["<end>"]
+        export_json(project, locale, start, end)
     elif as_xml:
         export_xml(project, locale)
 elif args['add']:
