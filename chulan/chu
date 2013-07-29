@@ -23,7 +23,7 @@ Options:
 """
 
 from docopt import docopt
-import chulan as ch
+import chulan.chulan as ch
 import json
 from lxml import etree
 
