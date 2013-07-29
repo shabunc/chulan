@@ -9,7 +9,7 @@ Usage:
     chu add locale <locale>
     chu add project <project>
     chu <project> <locale> rm <key>
-    chu <project> <locale> add <key> <value> 
+    chu <project> <locale> add [--force] <key> <value> 
     chu <project> <locale> edit <key> <value> 
     chu <project> <locale> export props
     chu <project> <locale> export json [--wrap <start> <end>]
@@ -66,6 +66,12 @@ def add_key(project_name, locale, key, value):
     project = ch.projects().get(project_name)
     if project:
         item, error = ch.items().add(key, value, project, locale)
+        if error:
+            if args['--force']:
+                print("looks like key already exists, trying to edit")
+                edit_key(project_name, locale, key, value)
+            else:
+                print("failed to add since such key already exists, please, try use --force")
         print("%s %s %s %s" % (project_name, locale, key, value))
 
 def remove_key(project, locale, key):
