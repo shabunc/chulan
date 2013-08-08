@@ -51,7 +51,8 @@ def export_json(project, locale, wrapstart="", wrapend=""):
     data = {locale: {}}
     for item in ch.items().list(project, locale):
         data[locale][item.key] = item.value
-    json_data = (json.dumps(data, sort_keys=True, ensure_ascii=False,indent=4, separators=(',', ': ')))
+    json_data = (json.dumps(data, sort_keys=True, ensure_ascii=False,indent=4, separators=(',', ': '), encoding="utf-8"))
+    json_data = ('%s' % (json_data)).encode('utf-8')
     res = wrapstart + json_data + wrapend
     print res
 
