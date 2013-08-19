@@ -124,7 +124,7 @@ elif args['add']:
     elif project:
         add_key(project, locale, key, value)
 elif args['edit']:
-    uroject, locale = args['<project>'], args['<locale>']
+    project, locale = args['<project>'], args['<locale>']
     key, value = args['<key>'], args['<value>']
     edit_key(project, locale, key, value)
 elif args['rm']:

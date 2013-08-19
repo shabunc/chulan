@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='chulan',
-    version='0.0.3',
+    version='0.0.5',
     author=u'Shahen Shabunc',
     author_email='shabunc@gmail.com',
     url='https://github.com/shabunc/chulan',
