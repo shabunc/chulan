@@ -29,12 +29,16 @@ class items:
             return (item, False)
         except sqlalchemy.exc.IntegrityError as error:
             return (item, error)    
-    def escape(self, val):
-        return ESCAPE_REGEXP.sub('\ ', val)
-    def list(self, project_name, locale="RU",format="properties"):
+    def preprocess(self, item):
+        item.value = ESCAPE_REGEXP.sub('\ ', item.value)
+        return item
+    def list(self, project_name, locale="RU",format="properties", escape=False):
         session = chu_alchemy.getSession()
         items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).order_by(chu_alchemy.Items.key).all()
-        return [self.escape(item) for item in items];
+        if escape:
+            return [self.preprocess(item) for item in items];
+        else:
+            return items
     def remove(self, project, locale, key):
         session = chu_alchemy.getSession()
         item = session.query(chu_alchemy.Items).filter_by(

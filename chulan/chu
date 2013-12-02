@@ -44,7 +44,7 @@ def add_locale(new_locale):
     ch.locales().add(new_locale)
 
 def export_props(project, locale):
-    for item in ch.items().list(project, locale):
+    for item in ch.items().list(project, locale, escape=True):
          print ("%s=%s" % (item.key, item.value)).encode('utf-8')
 
 def export_json(project, locale, wrapstart="", wrapend=""):
