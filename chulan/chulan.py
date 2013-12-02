@@ -5,7 +5,9 @@ import os
 import imp
 import chu_alchemy
 import sqlalchemy
+import re
 
+ESCAPE_REGEXP = re.compile(r"^[ ]+")
 
 class locales:
     def add(self, name):
@@ -27,10 +29,16 @@ class items:
             return (item, False)
         except sqlalchemy.exc.IntegrityError as error:
             return (item, error)    
-    def list(self, project_name, locale="RU",format="properties"):
+    def preprocess(self, item):
+        item.value = ESCAPE_REGEXP.sub('\ ', item.value)
+        return item
+    def list(self, project_name, locale="RU",format="properties", escape=False):
         session = chu_alchemy.getSession()
         items = session.query(chu_alchemy.Items).filter_by(project_name=project_name,locale_id=locale).order_by(chu_alchemy.Items.key).all()
-        return items;
+        if escape:
+            return [self.preprocess(item) for item in items];
+        else:
+            return items
     def remove(self, project, locale, key):
         session = chu_alchemy.getSession()
         item = session.query(chu_alchemy.Items).filter_by(
